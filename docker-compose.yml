@@ -1,0 +1,28 @@
+version: '3.7'
+
+services:
+  mysql:
+    image: mysql:8.0.26
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./services/mysql/conf.d/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+    environment:
+      TZ: ${APP_TIMEZONE}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    cap_add:
+      - SYS_NICE
+    ports:
+        - "3306:3306"
+   
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - mysql
+    ports:
+      - 8080:8080
+
+volumes:
+  mysql:
+
